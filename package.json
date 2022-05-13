@@ -41,11 +41,8 @@
     "replaceall": "^0.1.6",
     "request": "^2.88.2",
     "socket.io": "^4.4.1",
-    "stripe": "^8.168.0",
     "swagger-jsdoc": "^3.2.9",
     "swagger-ui-express": "^4.0.2",
-    "telr-nodejs": "^1.0.4",
-    "telr-payment": "^1.0.3",
     "underscore": "^1.9.1",
     "winston": "^3.3.3",
     "winston-mongodb": "^4.0.3"

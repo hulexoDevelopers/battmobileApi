@@ -24,10 +24,9 @@ router.post("/register", async (req, res, next) => {
   // if (usr) return res.json({ success: false, message: 'Email already register' });
   let usrContact = await User.findOne({ contact: req.body.contact });
   if (usrContact) return res.json({ success: false, message: 'Contact already register' });
-  if (user.role == 'customer' && user.isVerified == false) return res.json({ success: false, message: 'Account no active yet' });
   user.save().then(result => {
     if (result) {
-      res.status(200).json({ success: true, message: "Account created!" });
+      res.status(200).json({ success: true, message: "Account created!", data: result });
     } else {
       res.status(200).json({ success: false, message: "Error please try again!" });
     }
@@ -301,6 +300,21 @@ router.get('/allUsers', auth, async (req, res) => {
 router.put("/update/:id", auth, async (req, res, next) => {
   const user = await User.findById(req.params.id);
   req.body.updated_at = Date.now()
+  user.updateOne(req.body).then(data => {
+    if (data) {
+      res.status(200).json({ success: true, message: "Updated Successfully!" });
+    } else {
+      res.status(200).json({ success: false, message: "Values Not Updated!" });
+    }
+  });
+});
+
+
+//update user by id
+router.put("/updateLocation/:id", auth, async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  req.body.updated_at = Date.now()
+  delete req.body.activeStatus;
   user.updateOne(req.body).then(data => {
     if (data) {
       res.status(200).json({ success: true, message: "Updated Successfully!" });
@@ -614,5 +628,6 @@ router.get('/vehicles/:userId', auth, async (req, res) => {
     }
   })
 });
+
 
 module.exports = router;

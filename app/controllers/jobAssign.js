@@ -8,12 +8,12 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require("mongoose");
 
-// route to add new inquiry
+// route to add new job 
 router.post("/addnew", auth, async (req, res, next) => {
     const job = new jobAssign(req.body);
     job.save().then(result => {
         if (result) {
-            res.status(200).json({ success: true, message: "New values Saved successful!" });
+            res.status(200).json({ success: true, message: "New values Saved successful!", data: result._id });
         } else {
             res.status(200).json({ success: false, message: "values Not saved!" });
         }

@@ -33,6 +33,8 @@ router.get('/all', async (req, res) => {
     })
 });
 
+
+
 //get battery detail by battery id
 router.get('/:id', auth, async (req, res) => {
     Battery.findById(req.params.id).then(result => {
@@ -171,9 +173,9 @@ router.put("/upateBatteryStock/:batteryId/:stockId", auth, async (req, res, next
             $inc: { 'stock.$.totalSale': 1 }
         }
     )
-    // await Battery.findOneAndUpdate(
-    //     { _id: batteryId, 'stock.stockId': stockId },
-    //     { $inc: { 'stock.$.totalSale': 1 } })
+        // await Battery.findOneAndUpdate(
+        //     { _id: batteryId, 'stock.stockId': stockId },
+        //     { $inc: { 'stock.$.totalSale': 1 } })
         .then(data => {
             if (data) {
                 res.status(200).json({ success: true, message: "Values Updated Successfully!" });
