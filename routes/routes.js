@@ -24,6 +24,7 @@ const tyre = require('../app/controllers/tyre');
 const oil = require('../app/controllers/oil');
 const location = require('../app/controllers/locations');
 const contact = require('../app/controllers/mail');
+const sms = require('../app/controllers/sms');
 module.exports = function (app) {
 	app.use(express.json());
 	app.use(function (req, res, next) {
@@ -55,5 +56,6 @@ module.exports = function (app) {
 	app.use('/api/oil', oil);
 	app.use('/api/location', location);
 	app.use('/api/contact', contact);
+	app.use('/api/sms', sms);
 	app.use(error);
 }

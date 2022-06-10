@@ -201,6 +201,27 @@ router.post('/changePassword', auth, async (req, res) => {
 });
 
 
+
+//update technician password
+router.post('/changeTechnicianPassword', auth, async (req, res) => {
+  const user = await User.findById(req.body.id);
+  if (!user) return res.json({ success: false, message: 'User not found' });
+  // const validPassword = bcrypt.compareSync(req.body.password, user.password);
+  // if (!validPassword) return res.json({ success: false, message: 'Invalid previous password.' });
+  var newPassword = req.body.newPassword
+  newPassword = bcrypt.hashSync(newPassword, saltRounds);
+  await user.updateOne(
+    {
+      $set:
+      {
+        password: newPassword,
+        updated_at: Date.now(),
+      }
+    }
+  )
+  res.json({ success: true, message: 'Password is reset successfully!' });
+});
+
 router.post('/userToken', async (req, res) => {
   console.log('call hit' + JSON.stringify(req.body))
   let token = req.body.token;
@@ -577,6 +598,7 @@ router.get('/vehicles/:userId', auth, async (req, res) => {
   const userVehicles = user.vehicles;
   if (!userVehicles.length) {
     res.status(200).json({ success: true, data: [] });
+    return
   }
 
   let objIds = []

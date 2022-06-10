@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var app = express();
+const smsManager = require('../../middleware/sms');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server, {
     cors: {
@@ -48,6 +49,7 @@ io.on("connection", (socket) => {
 
     //active jobs
     socket.on('activateJob', function (data) {
+        smsManager.jobConfirmation(data.techContact)
         socket.broadcast.emit('updateActiveJobs', data);
     });
 
@@ -55,6 +57,11 @@ io.on("connection", (socket) => {
     //new inquiry
     socket.on('newInquiry', function (data) {
         socket.broadcast.emit('newInquiryRcvd', data);
+    });
+
+    //location update
+    socket.on('locatoinUpdate', function (data) {
+        socket.broadcast.emit('locationUpdated', data);
     });
 
     //new inquiry
@@ -134,14 +141,5 @@ io.on("connection", (socket) => {
 });
 
 
-router.get('/findFriend/:id', async (req, res) => {
-    let id = req.params.id;
-    let user = getUser(id)
-    if (user) {
-        res.status(200).json({ success: true, data: 'user is online' });
-    } else {
-        res.status(200).json({ success: false, data: 'user is offline' });
-    }
-});
 
 module.exports = router;

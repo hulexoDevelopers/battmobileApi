@@ -7,12 +7,17 @@ const { User } = require('../models/user');
 const express = require('express');
 const router = express.Router();
 const mongoose = require("mongoose");
-
+const smsManager = require('../../middleware/sms');
 // route to add new job 
 router.post("/addnew", auth, async (req, res, next) => {
     const job = new jobAssign(req.body);
     job.save().then(result => {
         if (result) {
+            let user = User.findById(result.techId);
+            if (user && user.contact) {
+                smsManager.newJobAssign(user.contact)
+            }
+
             res.status(200).json({ success: true, message: "New values Saved successful!", data: result._id });
         } else {
             res.status(200).json({ success: false, message: "values Not saved!" });

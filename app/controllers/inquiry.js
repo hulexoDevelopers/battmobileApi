@@ -2,6 +2,7 @@ const auth = require('../../middleware/auth');
 const admin = require('../../middleware/admin');
 const { inquiry } = require('../models/inquiry');
 const express = require('express');
+const smsManager = require('../../middleware/sms');
 const router = express.Router();
 
 // route to add new inquiry
@@ -16,6 +17,7 @@ router.post("/addnew", auth, async (req, res, next) => {
         const inq = new inquiry(req.body);
         inq.save().then(result => {
             if (result) {
+                smsManager.newInquirySms(result.contactNo)
                 res.status(200).json({ success: true, message: "New values Saved successful!" });
             } else {
                 res.status(200).json({ success: false, message: "values Not saved!" });
